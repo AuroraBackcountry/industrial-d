@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inspection Mode — Industrial Dating</title>
+<meta name="description" content="Swipe through the Industrial Dating roster. Right to certify, left to red-tag. This is a formal inspection.">
+<link rel="canonical" href="https://industrial-dating.ca/swipe.html">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://industrial-dating.ca/swipe.html">
+<meta property="og:title" content="Inspection Mode — Industrial Dating">
+<meta property="og:description" content="Swipe right to certify. Swipe left to red-tag. Every inspection is recorded.">
+<meta property="og:image" content="https://industrial-dating.ca/assets/img/og-home.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="hazard"></div>
+
+<nav>
+  <a class="logo" href="index.html">INDUSTRIAL<b>DATING</b></a>
+  <div class="navtag">// inspection mode · swipe to file</div>
+</nav>
+
+<div class="swipepage">
+  <span class="stamp">⚠ Formal inspection in progress</span>
+  <h2 class="sechead" style="margin-top:18px">Inspection mode</h2>
+  <p class="seclead" style="margin-left:auto;margin-right:auto">Swipe right to certify. Swipe left to red-tag. Every inspection is entered into the permanent record, unless you change your mind, which is also recorded.</p>
+
+  <div class="deck" id="deck"></div>
+
+  <div class="swipebtns">
+    <button type="button" class="sbtn sbtn-tag" id="btn-tag">⚠ Red-tag</button>
+    <button type="button" class="sbtn" id="btn-skip">Skip</button>
+    <button type="button" class="sbtn sbtn-cert" id="btn-cert">✔ Certify</button>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p class="osha">Notice: swiping left on a coworker carries no legal weight but he will find out. Inspections may be revoked on the roster page by clicking your vote again, coward.</p>
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/swipe.js"></script>
+</body>
+</html>

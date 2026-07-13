@@ -37,6 +37,7 @@
     <div class="herobtns">
       <a href="submit.html" class="btn btn-y">Enroll a unit</a>
       <a href="#roster" class="btn btn-ghost">Browse the roster</a>
+      <a href="swipe.html" class="btn btn-ghost">Inspection mode</a>
     </div>
   </div>
 </section>
@@ -45,6 +46,14 @@
 <div class="ticker" aria-hidden="true">
   <div class="run">
     <span>4,382 verified operators online</span>·<span>0.4 women online</span>·<span>Average grip strength: concerning</span>·<span>98% steel-toe compliant</span>·<span>Longest streak between showers: 19 days</span>·<span>Beard hazard rating: elevated</span>·<span>4,382 verified operators online</span>·<span>0.4 women online</span>·<span>Average grip strength: concerning</span>·<span>98% steel-toe compliant</span>·<span>Longest streak between showers: 19 days</span>·<span>Beard hazard rating: elevated</span>·
+  </div>
+</div>
+
+<!-- TOOLBOX TALK -->
+<div class="talk">
+  <div class="wrap">
+    <span class="talkno" id="talkno">// TOOLBOX TALK</span>
+    <span id="talkline"></span>
   </div>
 </div>
 
@@ -98,6 +107,46 @@
 
     <div class="featstack" id="crew">
       <!-- cards rendered by js/app.js: crew-submitted units first, then the founding bench -->
+    </div>
+  </div>
+</section>
+
+<!-- PERFORMANCE REVIEW (leaderboard) -->
+<section class="sec" id="review">
+  <div class="wrap">
+    <div class="eyebrow">// Quarterly performance review · live inspection data</div>
+    <h2 class="sechead">Performance review</h2>
+    <p class="seclead">Compiled from certified public inspections. Results are final. Appeals go in the suggestion box, which is a shredder.</p>
+    <div class="lbgrid">
+      <div class="lbcol">
+        <div class="lbhead lbhead-cert">✔ Cleared for operation</div>
+        <ol id="lb-cert" class="lblist"></ol>
+      </div>
+      <div class="lbcol">
+        <div class="lbhead lbhead-tag">⚠ Safety concerns</div>
+        <ol id="lb-tag" class="lblist"></ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOAD MATCH (compatibility calculator) -->
+<section class="sec" id="loadmatch" style="padding-top:0">
+  <div class="wrap">
+    <div class="eyebrow">// Compatibility engineering · form LM-69</div>
+    <h2 class="sechead">Load match</h2>
+    <p class="seclead">Select two units for a certified compatibility assessment. Results are deterministic, binding, and admissible at the next toolbox meeting.</p>
+    <div class="lmpanel">
+      <div class="lmpick">
+        <select id="lm-a" aria-label="First unit"></select>
+        <span class="lmx">×</span>
+        <select id="lm-b" aria-label="Second unit"></select>
+        <button type="button" id="lm-run" class="btn btn-y">Run test</button>
+      </div>
+      <div id="lm-result" class="lmresult" hidden>
+        <div class="specs" id="lm-specs"></div>
+        <div class="lmverdict" id="lm-verdict"></div>
+      </div>
     </div>
   </div>
 </section>

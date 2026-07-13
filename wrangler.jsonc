@@ -5,5 +5,5 @@
   "name": "industrial-d",
   "compatibility_date": "2026-07-13",
   "observability": { "enabled": true },
-  "assets": { "directory": "." }
+  "assets": { "directory": ".", "not_found_handling": "404-page" }
 }

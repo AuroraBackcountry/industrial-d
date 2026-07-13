@@ -1,11 +1,10 @@
 /* =====================================================================
    INDUSTRIAL DATING — roster + voting
-   - Renders the founding crew (hardcoded below) immediately.
-   - Fetches approved, team-submitted units from Supabase and slots
-     them in at the top of the roster.
-   - Lets visitors CERTIFY or RED-TAG any unit (one vote per unit,
-     per browser — enforced with localStorage, which is honor-system
-     security, which is on-brand for this crew).
+   - The roster is fully database-driven: every approved unit (founding
+     crew included) lives in industrial_dating_members. Johnny keeps the
+     static featured card; everyone else renders into the stack.
+   - Visitors CERTIFY or RED-TAG any unit; votes are toggleable and keyed
+     by an anonymous per-browser voter_id.
    ===================================================================== */
 
 const REST = CONFIG.SUPABASE_URL.replace(/\/$/, '') + '/rest/v1';
@@ -20,17 +19,6 @@ const API_HEADERS = {
 const UNITS = {
   'johnny-the-drill-sims': { name: 'Johnny "The Drill" Sims' }
 };
-
-/* ---- The founding bench ---- */
-const crew = [
-  {n:"Jye \"Butterfingers\" Beech", r:"Carpenter's mate", b:'Carpenter\'s mate. Measures twice, commits zero times. Great with his hands on the clock, tragic with them off it. Can frame a whole house but not a single sentence about his feelings. Owns 40 clamps and still cannot hold on to anyone. Never drops anything. Just almost drops everything, constantly, all day long. Do not believe him when he says he has a Beech bod.', t:["Great with his hands","Almost","Son of a Beech"], spec:[{l:"Grip retention",v:"LOW",p:20,hi:1},{l:"Commitment",v:"4%",p:4},{l:"Clamps owned",v:"MAX",p:100},{l:"Near-drops/hr",v:"HIGH",p:88,hi:1}], p:"assets/img/jye.jpg"},
-  {n:"Dave \"The Supervisor\" Schenkhisenhowsener", r:"Level 1.9 rope access tech · unofficial supervisor", b:'Goes by Dave, because nobody can spell the rest. A level 1.9 rope access tech, which is not a real certification level, which tells you plenty about the rest of him. The crew pseudo, entirely unofficial supervisor: a title he gave himself and nobody has bothered to revoke. Very good at pushing rope on and off the mountain. Slightly taller than Jye, and mentions it.', t:["Level 1.9","Self-appointed supervisor","Pushes rope uphill"], spec:[{l:"Rope throughput",v:"HIGH",p:92,hi:1},{l:"Cert validity",v:"1.9",p:19},{l:"Authority (self-granted)",v:"MAX",p:100,hi:1},{l:"Surname spelled right",v:"8%",p:8}], p:"assets/img/dave.jpg"},
-  {n:"Andrew \"Second Thoughts\" McNabb", r:"Safety Captain — or whatever, he doesn't care I guess", b:'Roughly twice the height of Jye and Dave combined. Always has a suggestion. Always takes it back about four seconds later. A fully air-pneumatic suggestion box: enormous output, precisely zero follow-through. Nominated for a safety award every single quarter despite never once being observed committing to anything. Also a self-described sub-Alpine escort, which he maintains is strictly a mountain-safety credential.', t:["Perpetual award nominee","All output, no follow-through","Non-committal"], spec:[{l:"Suggestion output",v:"MAX",p:100,hi:1},{l:"Follow-through",v:"2%",p:2},{l:"Height",v:"OFF-CHART",p:100},{l:"Award nominations",v:"MAX",p:96,hi:1}], p:"assets/img/andrew.jpg"},
-  {n:"Ali \"Andro\" Castro", r:"Level 8 carpenter · battery mule", b:'Level 8 carpenter, which is either four levels above Jye or completely invented. The crew battery mule: hauls everyone else\'s dead packs uphill and still has charge to spare. A walking suggestion box who, unlike Andrew, actually commits to the bit. Loves to drill holes and screw anything he cannot nail.', t:["Level 8","Battery mule","Screws what he cannot nail"], spec:[{l:"Battery reserve",v:"FULL",p:98,hi:1},{l:"Restraint",v:"10%",p:10},{l:"Cert level",v:"8",p:80},{l:"Holes drilled",v:"MAX",p:100,hi:1}], p:"assets/img/ali.jpg"},
-  {n:"Robbie \"One & Done\" Chmelyker", r:"Rope access tech · no protection required", b:'The boss on the mountain and, by his own account, in bed. The only rope access tech who never clips in - no harness, no protection - and somehow still leaves you feeling warm inside. Strictly a one-and-done encounter who always has a very important meeting to run to immediately afterward. Do not worry. He will call you.', t:["No harness required","One and done","Will definitely call"], spec:[{l:"Warmth rating",v:"HIGH",p:86,hi:1},{l:"Callback odds",v:"3%",p:3},{l:"Protection used",v:"0%",p:2},{l:"Exit speed",v:"MAX",p:100,hi:1}], p:"assets/img/robbie.jpg"},
-  {n:"Kai \"The Algorithm\" McGrady", r:"Rope access tech · content creator", b:'At 23, the youngest unit on the roster and the only one with a media kit. Technically a rope access tech, functionally a content creator who films the rope access techs. Trains MMA, runs a blog nobody asked for, and has been load-tested primarily by the algorithm. Will scale a rock, but only if the lighting is good.', t:["Youngest unit","More followers than fall-arrest","Films everything"], spec:[{l:"Engagement rate",v:"HIGH",p:90,hi:1},{l:"Rock actually scaled",v:"12%",p:12},{l:"Follower count",v:"MAX",p:97,hi:1},{l:"Harness use",v:"15%",p:15}], p:"assets/img/kai.jpg"},
-  {n:"Walker \"The Talker\" Ragpuller", r:"Rag puller · rope access tech", b:'Never stops talking, which is conveniently why nobody notices he is also never clipped in. Offers free mustache rides to anyone within earshot, requested or otherwise. Arrives on site fully stocked with eye wash, purely as a precaution against pink eye - a sentence he flatly refuses to elaborate on. Pulls rope. Pulls focus. Pulls up before anyone asks a follow-up question.', t:["Free mustache rides","BYO eye wash","Never stops talking"], spec:[{l:"Words per minute",v:"MAX",p:100,hi:1},{l:"Silence output",v:"2%",p:2},{l:"Mustache rides",v:"FREE",p:100,hi:1},{l:"Eye wash stock",v:"FULL",p:95}], p:"assets/img/walker.jpg"},
-];
 
 /* ---- Card building ---- */
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
@@ -48,7 +36,7 @@ function genSpecs(name){
   return picks;
 }
 
-/* Normalize a hardcoded crew entry OR a Supabase row into one shape. */
+/* Normalize a Supabase row into the card shape. */
 function fieldset(m){
   var name=m.n||m.name||'';
   return {
@@ -58,8 +46,7 @@ function fieldset(m){
     tags:Array.isArray(m.t)?m.t:(Array.isArray(m.tags)?m.tags:String(m.tags||'').split(',').map(function(sv){return sv.trim();}).filter(Boolean)),
     photo:m.p||m.photo||'',
     spec:(m.spec&&m.spec.length)?m.spec:genSpecs(name),
-    key:m.id?('u-'+m.id):slug(name),
-    submitted:!!m.id
+    key:slug(name)
   };
 }
 
@@ -75,7 +62,6 @@ function buildCard(f){
   }).join('')+'</div>';
   el.innerHTML=
     '<div class="cardno">00</div>'+
-    (f.submitted?'<div class="membernum">TEAM SUBMITTED</div>':'')+
     photo+
     '<div class="fbody">'+
       '<div class="fname">'+esc(f.name)+'</div>'+
@@ -95,27 +81,27 @@ function renumber(){
   });
 }
 
-/* ---- Render: founding crew now, submitted units when they arrive ---- */
+/* ---- Render the roster from the database ---- */
 const grid = document.getElementById('crew');
-crew.forEach(function(m){ grid.appendChild(buildCard(fieldset(m))); });
-renumber();
-initVoteboxes(document);
-initLoadMatch();
+initVoteboxes(document);   // Johnny's featured votebox works even if the roster fetch fails
 
 async function loadMembers(){
   try{
     const res=await fetch(REST+'/industrial_dating_members?select=id,name,title,bio,photo,tags,spec&order=created_at.desc',{headers:API_HEADERS});
     if(!res.ok) throw new Error('status '+res.status);
     const rows=await res.json();
-    if(!Array.isArray(rows)||!rows.length) return;
-    const frag=document.createDocumentFragment();
-    rows.forEach(function(m){frag.appendChild(buildCard(fieldset(m)));});
-    initVoteboxes(frag);
-    grid.insertBefore(frag, grid.firstChild);   // newest team additions lead the roster
+    grid.innerHTML='';
+    rows.map(fieldset)
+      .filter(function(f){ return f.key!=='johnny-the-drill-sims'; })   // he has the featured card
+      .forEach(function(f){ grid.appendChild(buildCard(f)); });
     renumber();
-    initLoadMatch();                            // refresh dropdowns with new units
+    initVoteboxes(document);
+    initLoadMatch();
     refreshVoteCounts();
-  }catch(e){ console.warn('Roster load skipped:', e.message); }
+  }catch(e){
+    console.warn('Roster load failed:', e.message);
+    grid.innerHTML='<div class="lbempty">// ROSTER OFFLINE. THE COMMITTEE IS INVESTIGATING. TRY A REFRESH.</div>';
+  }
 }
 loadMembers();
 

@@ -2,8 +2,8 @@
 
 > Love rated for heavy loads. A joke dating site for the crew — every member load-tested, torque-verified, and cleared for emotional operation. Mostly.
 
-Live site: enable GitHub Pages (see [Deploying](#deploying)) and it will be at
-`https://aurorabackcountry.github.io/industrial-d/`
+Live site: **https://www.industrial-dating.ca** (Cloudflare Pages)
+Mirror: `https://aurorabackcountry.github.io/industrial-d/` (GitHub Pages)
 
 ## How it works
 
@@ -90,5 +90,12 @@ python3 -m http.server 8000
 
 ## Deploying
 
-Deploys are automatic via GitHub Actions on every push to `main`.
-One-time setup: repo **Settings → Pages → Source → GitHub Actions**.
+Every push to `main` deploys automatically to **both** hosts:
+
+- **Cloudflare Pages** → https://www.industrial-dating.ca (primary; git-connected,
+  no build step, `_redirects` sends the apex domain to www)
+- **GitHub Pages** → aurorabackcountry.github.io/industrial-d (mirror; via
+  `.github/workflows/deploy.yml`)
+
+Build settings on Cloudflare Pages: framework preset **None**, build command
+**empty**, output directory **/** (the repo root is the site).

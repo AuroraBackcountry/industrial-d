@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HR Portal — Industrial Dating</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="hazard"></div>
+
+<nav>
+  <a class="logo" href="index.html">INDUSTRIAL<b>DATING</b></a>
+  <div class="navtag">// hr portal · authorized personnel only</div>
+</nav>
+
+<div class="formpage">
+
+  <!-- LOGIN -->
+  <div id="login">
+    <span class="stamp">⚠ Restricted area · badge required</span>
+    <h2 class="sechead" style="margin-top:18px">HR login.</h2>
+    <p class="seclead">Authorized personnel only. Unauthorized access attempts will be noted in your file. Your file is thick.</p>
+    <form id="loginform" class="formcard" novalidate>
+      <div class="membernum">CLEARANCE CHECK</div>
+      <div class="field">
+        <label for="hr-pass">Access credential</label>
+        <input type="password" id="hr-pass" autocomplete="current-password" placeholder="••••••••">
+        <span class="hint">Issued by the foreman. If you don't have it, you are the reason it exists.</span>
+      </div>
+      <button type="submit" class="btn btn-y" style="width:100%">Authenticate</button>
+      <div class="formmsg" id="loginmsg" role="alert"></div>
+    </form>
+  </div>
+
+  <!-- QUEUE -->
+  <div id="portal" hidden>
+    <span class="stamp">✔ Clearance granted</span>
+    <h2 class="sechead" style="margin-top:18px">Pending inspections.</h2>
+    <p class="seclead">Units awaiting certification. Approve to weld them onto the roster; reject to make them never have existed. <button type="button" id="hr-logout" class="hrlink">Surrender badge</button></p>
+    <div id="queue"></div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <p class="osha">HR decisions are final, binding, and made by whoever has the password. This is consistent with how HR works everywhere.</p>
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/hr.js"></script>
+</body>
+</html>

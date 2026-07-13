@@ -2,8 +2,7 @@
 
 > Love rated for heavy loads. A joke dating site for the crew — every member load-tested, torque-verified, and cleared for emotional operation. Mostly.
 
-Live site: **https://industrial-dating.ca** (Cloudflare Pages)
-Mirror: `https://aurorabackcountry.github.io/industrial-d/` (GitHub Pages)
+Live site: **https://industrial-dating.ca**
 
 ## How it works
 
@@ -90,10 +89,7 @@ python3 -m http.server 8000
 
 ## Deploying
 
-Every push to `main` deploys automatically to **both** hosts:
-
-- **Cloudflare Workers** → https://industrial-dating.ca (primary; git-connected
-  static assets, config in `wrangler.jsonc`, non-site files excluded via
-  `.assetsignore`)
-- **GitHub Pages** → aurorabackcountry.github.io/industrial-d (mirror; via
-  `.github/workflows/deploy.yml`)
+Every push to `main` auto-deploys to **Cloudflare Workers** at
+https://industrial-dating.ca — git-connected static assets, config in
+`wrangler.jsonc`, non-site files excluded from serving via `.assetsignore`.
+`www` 301s to the bare domain via a Cloudflare Redirect Rule.

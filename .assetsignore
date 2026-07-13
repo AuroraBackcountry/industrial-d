@@ -1,9 +1,7 @@
 # Files the Cloudflare Worker must NOT serve as public static assets.
 .git
-.github
 .wrangler
 .gitignore
-.nojekyll
 supabase
 README.md
 wrangler.jsonc

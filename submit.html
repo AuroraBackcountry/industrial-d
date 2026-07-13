@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enroll a Unit — Industrial Dating</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="hazard"></div>
+
+<nav>
+  <a class="logo" href="index.html">INDUSTRIAL<b>DATING</b></a>
+  <div class="navtag">// unit intake · form ID-001</div>
+</nav>
+
+<div class="formpage">
+  <span class="stamp">⚠ Intake area · honesty optional</span>
+  <h2 class="sechead" style="margin-top:18px">Enroll a unit<br>for load testing.</h2>
+  <p class="seclead">Nominate a coworker for the roster. All submissions are reviewed by the safety committee (one guy) before certification. Approved units appear on the roster with spec bars assigned by the algorithm. The algorithm is not accepting appeals.</p>
+
+  <form id="unitform" class="formcard" novalidate>
+    <div class="membernum">PENDING INSPECTION</div>
+
+    <div class="field">
+      <label for="f-name">Unit name <em>*</em></label>
+      <input type="text" id="f-name" maxlength="80" placeholder='Terry "Two Ladders" Smith' required>
+      <span class="hint">Full designation including site nickname. The nickname is load-bearing.</span>
+    </div>
+
+    <div class="field">
+      <label for="f-title">Role / designation</label>
+      <input type="text" id="f-title" maxlength="120" placeholder="Level 3 scaffolder · certified in theory">
+    </div>
+
+    <div class="field">
+      <label for="f-bio">Inspection notes</label>
+      <textarea id="f-bio" maxlength="600" placeholder="What makes this unit date-ready? Known defects? Be honest. HR isn't reading this. Probably."></textarea>
+      <span class="hint">Max 600 characters. Rendered as the unit's dating quote.</span>
+    </div>
+
+    <div class="field">
+      <label for="f-tags">Certifications</label>
+      <input type="text" id="f-tags" maxlength="200" placeholder="Great with his hands, Forklift certified, Will not text back">
+      <span class="hint">Comma separated. Up to 6.</span>
+    </div>
+
+    <div class="field">
+      <label for="f-photo">Unit photo</label>
+      <input type="file" id="f-photo" accept="image/jpeg,image/png,image/webp">
+      <span class="hint">Optional. JPG/PNG/WebP, 5 MB max. No photo = initials plate, which is somehow worse for them.</span>
+    </div>
+
+    <!-- Honeypot: humans never see this field; bots fill it and get quietly binned. -->
+    <div class="hp" aria-hidden="true">
+      <label for="f-website">Website</label>
+      <input type="text" id="f-website" tabindex="-1" autocomplete="off">
+    </div>
+
+    <button type="submit" id="f-submit" class="btn btn-y" style="width:100%">Submit for load testing</button>
+    <div class="formmsg" id="formmsg" role="alert"></div>
+  </form>
+
+  <div class="submitok" id="submitok" hidden>
+    <span class="bigstamp">Unit received</span>
+    <p>Your nomination is with the foreman for safety review. Approved units are welded onto the roster. Rejected units are never spoken of again.</p>
+    <p class="mono">// processing time: whenever he gets to it</p>
+    <div class="herobtns" style="justify-content:center;margin-top:26px">
+      <a href="index.html" class="btn" style="background:var(--black);color:var(--hiviz)">Back to the roster</a>
+      <button type="button" id="another" class="btn btn-ghost" style="border-color:var(--black);color:var(--black)">Enroll another unit</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p class="osha">Notice: submissions may be edited for length, safety, and comedic torque. By submitting a coworker you confirm they can take a joke, or at minimum that you can outrun them.</p>
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/submit.js"></script>
+</body>
+</html>

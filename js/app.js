@@ -95,7 +95,7 @@ initVoteboxes(document);
 
 async function loadMembers(){
   try{
-    const res=await fetch(REST+'/industrial_dating_members?select=id,name,title,bio,photo,tags&order=created_at.desc',{headers:API_HEADERS});
+    const res=await fetch(REST+'/industrial_dating_members?select=id,name,title,bio,photo,tags,spec&order=created_at.desc',{headers:API_HEADERS});
     if(!res.ok) throw new Error('status '+res.status);
     const rows=await res.json();
     if(!Array.isArray(rows)||!rows.length) return;

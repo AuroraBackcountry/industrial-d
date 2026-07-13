@@ -55,18 +55,35 @@ form.addEventListener('submit', async function (e) {
     const file = document.getElementById('f-photo').files[0];
     if (file) photoUrl = await uploadPhoto(file);
 
-    const res = await fetch(REST + '/industrial_dating_members', {
-      method: 'POST',
-      headers: Object.assign({ 'Content-Type': 'application/json', Prefer: 'return=minimal' }, API_HEADERS),
-      body: JSON.stringify({
-        name: name,
-        title: document.getElementById('f-title').value.trim() || null,
-        bio: document.getElementById('f-bio').value.trim() || null,
-        tags: tags,
-        photo: photoUrl
-      })
-    });
-    if (!res.ok) throw new Error('Intake rejected (status ' + res.status + '). Try again.');
+    const payload = {
+      name: name,
+      title: document.getElementById('f-title').value.trim() || null,
+      bio: document.getElementById('f-bio').value.trim() || null,
+      tags: tags,
+      photo: photoUrl
+    };
+
+    // Primary path: the enroll-unit Edge Function, which has Claude rewrite
+    // the submission as an on-brand roast profile before it hits the queue.
+    // Fallback: insert the raw submission directly if the function is down.
+    let ok = false;
+    try {
+      const fnRes = await fetch(CONFIG.SUPABASE_URL + '/functions/v1/enroll-unit', {
+        method: 'POST',
+        headers: Object.assign({ 'Content-Type': 'application/json' }, API_HEADERS),
+        body: JSON.stringify(payload)
+      });
+      ok = fnRes.ok;
+    } catch (e) { /* fall through to direct insert */ }
+
+    if (!ok) {
+      const res = await fetch(REST + '/industrial_dating_members', {
+        method: 'POST',
+        headers: Object.assign({ 'Content-Type': 'application/json', Prefer: 'return=minimal' }, API_HEADERS),
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error('Intake rejected (status ' + res.status + '). Try again.');
+    }
     showSuccess();
   } catch (err) {
     msg.textContent = '⚠ ' + err.message;

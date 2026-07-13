@@ -1,0 +1,9 @@
+// Cloudflare Workers config — static site served from the repo root.
+// Committed so deploys don't depend on wrangler's auto-generated defaults.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "industrial-d",
+  "compatibility_date": "2026-07-13",
+  "observability": { "enabled": true },
+  "assets": { "directory": "." }
+}

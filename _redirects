@@ -1,2 +1,0 @@
-# Cloudflare Pages redirects — canonical host is www.industrial-dating.ca
-https://industrial-dating.ca/* https://www.industrial-dating.ca/:splat 301
